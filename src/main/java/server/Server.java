@@ -1,5 +1,6 @@
 package server;
 
+import channel.ServerChannel;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -41,7 +42,7 @@ public class Server {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception{
                             ch.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));
-                            ch.pipeline().addLast();
+                            ch.pipeline().addLast(new ServerChannel());
                         }
                     });
             System.out.println(Port);

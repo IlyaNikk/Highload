@@ -1,45 +1,45 @@
 package Http;
 
+import io.netty.channel.ChannelFuture;
+
 /**
  * Created by ilya on 3/15/17.
  */
 public class Request {
 
-    private String[] allowedMethods = {"GET", "HEAD"};
+    private Response response;
+    private StringBuffer responseAnswer;
 
     public Request(String msg) {
+        response = new Response();
         System.out.println("in request message:");
         System.out.println(msg);
         final String[] information = msg.split("\\n");
-        for (int i = 0; i < information.length; i++) {
-            System.out.println(information[i] + '\n');
-            switch(i){
-                case 0:
-                    checkFirstLine(information[i]);
+        for(String line: information){
+            final String[] separateWords = line.split(" ");
+            switch(separateWords[0]){
+                case "GET":
+                    response.methodGet();
+                    try{
+                        response.setContentLenght(separateWords[1]);
+                        response.setContentType();
+                        response.setData(separateWords[1]);
+                    } catch (Exception e){
+                        System.out.println(e);
+                    }
+                    responseAnswer = response.getResponse();
                     break;
+                case "HEAD" :
+                    response.methodHead();
+                    responseAnswer = response.getResponse();
+                    break;
+            }
+        }
+        System.out.println(responseAnswer);
+   }
 
-            }
-        }
-    }
-
-    public void checkFirstLine(String line){
-        boolean methodCheck = false;
-        final String[] separateWords = line.split(" ");
-        for(String method: allowedMethods){
-            if(method.equals(separateWords[0])){
-                methodCheck = true;
-            }
-        }
-        if(methodCheck) {
-            for (String word : separateWords) {
-                System.out.println(word + '\n');
-            }
-            if (separateWords[0].equals("GET")) {
-                new Response().methodGet();
-            } else if (separateWords[0].equals("HEAD")) {
-                new Response().methodHead();
-            }
-        }
-    }
+   public String getResponse(){
+       return responseAnswer.toString();
+   }
 
 }

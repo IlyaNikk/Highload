@@ -10,6 +10,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
 
 import java.net.Socket;
@@ -42,7 +43,8 @@ public class Server {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception{
                             ch.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));
-                            ch.pipeline().addLast(new ServerChannel());
+                            ch.pipeline().addLast(new ServerChannel(dir));
+                            ch.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8));
                         }
                     });
             System.out.println(Port);

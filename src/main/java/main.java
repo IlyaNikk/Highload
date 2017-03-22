@@ -6,14 +6,13 @@ import server.Server;
  */
 public class main {
 
-    private static String dir;
+    private static String dir = ".";
     private static final int Port = 8080;
     private static int cpuNumber = 0;
 
     public static void main(String[] args) throws InterruptedException {
         parseCommandLine(args);
 
-        System.out.println("LOLOLoloollolllol");
         new Server(dir, Port, cpuNumber).run();
     }
 

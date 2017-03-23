@@ -33,7 +33,7 @@ public class Server {
 
     public void run() throws InterruptedException{
         final EventLoopGroup bossGroup = new NioEventLoopGroup();
-        final EventLoopGroup workerGroup = new NioEventLoopGroup();
+        final EventLoopGroup workerGroup = new NioEventLoopGroup(cpuNumber);
         try{
             final ServerBootstrap server = new ServerBootstrap();
             server.group(bossGroup, workerGroup)

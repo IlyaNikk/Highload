@@ -12,4 +12,4 @@ mvn_clean:
 	@mvn clean
 
 rm_httpd:
-@rm -f ./httpd
+	@rm -f ./httpd

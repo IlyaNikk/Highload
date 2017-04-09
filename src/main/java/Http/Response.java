@@ -1,6 +1,16 @@
 package Http;
 
+import org.jetbrains.annotations.NotNull;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,6 +26,8 @@ public class Response {
     private boolean fileExist = false;
     private boolean fileAbsent = false;
     private boolean text = true;
+    private String fileType;
+    private int status;
 
     public Response(String serverDirectory) {
         this.serverDirectory = serverDirectory;
@@ -40,7 +52,6 @@ public class Response {
     }
 
     public void methodHead() {
-        System.out.println("Head Response");
         responseAnswer.append("HTTP/1.1 ");
         checkPath();
         if (fileExist) {
@@ -92,7 +103,8 @@ public class Response {
     public void setContentType() {
         final String[] parse = directory.split("\\.");
         responseAnswer.append("Content-Type: ");
-        switch (parse[parse.length - 1]) {
+        fileType = parse[parse.length - 1];
+        switch (fileType) {
             case "txt":
                 responseAnswer.append("text/plain \r\n\r\n");
                 break;
@@ -134,11 +146,6 @@ public class Response {
             for (String line : lines) {
                 responseAnswer.append(line + "\n");
             }
-        } else {
-            final byte[] bytes = Files.readAllBytes(index);
-            for (byte oneByte : bytes) {
-                responseAnswer.append(oneByte);
-            }
         }
     }
 
@@ -168,15 +175,32 @@ public class Response {
         }
     }
 
-    public String getStatus(int status) {
+    @NotNull
+    private String getStatus(int status) {
         switch (status) {
             case 403:
+                this.status = 403;
                 return "403 Forbidden\r\n";
             case 404:
+                this.status = 404;
                 return "404 Not Found\r\n";
             case 405:
+                this.status = 405;
                 return "405 Method Not Allowed\r\n";
         }
+        this.status = 200;
         return "200 OK\r\n";
+    }
+
+    public boolean checkPicture(){
+        return text;
+    }
+
+    public String getPath(){
+        return index.toString();
+    }
+
+    public int checkStatus(){
+        return status;
     }
 }

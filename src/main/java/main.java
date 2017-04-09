@@ -7,20 +7,21 @@ import server.Server;
 public class main {
 
     private static String dir = ".";
-    private static final int Port = 8080;
-    private static int cpuNumber = 2;
+    private static int port = 8080;
+    private static int threadsNumber = 4;
 
     public static void main(String[] args) throws InterruptedException {
         parseCommandLine(args);
 
-        new Server(dir, Port, cpuNumber).run();
+        new Server(dir, port, threadsNumber).run();
     }
 
     public static void parseCommandLine(String[] args) {
-        Options option = new Options();
+        final Options option = new Options();
 
         option.addOption("r", true, "directory");
-        option.addOption("c", true, "CPU Number");
+        option.addOption("c", true, "Threads Number");
+        option.addOption("p", true, "Port");
 
         final CommandLineParser params = new PosixParser();
         final CommandLine cmd;
@@ -35,9 +36,14 @@ public class main {
             dir = parseDir;
         }
 
-        final String parseNumber = cmd.getOptionValue("c");
+        String parseNumber = cmd.getOptionValue("c");
         if(parseNumber != null){
-            cpuNumber = Integer.parseInt(parseNumber);
+            threadsNumber = Integer.parseInt(parseNumber);
+        }
+
+        parseNumber = cmd.getOptionValue("p");
+        if(parseNumber != null){
+            port = Integer.parseInt(parseNumber);
         }
     }
 }

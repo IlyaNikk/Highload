@@ -23,17 +23,17 @@ public class Server {
 
     private String dir;
     private int Port;
-    private int cpuNumber;
+    private int threadsNumber;
 
-    public Server(String dir, int Port, int cpuNumber){
+    public Server(String dir, int Port, int threadsNumber){
         this.dir = dir;
         this.Port = Port;
-        this.cpuNumber = cpuNumber;
+        this.threadsNumber = threadsNumber;
     }
 
     public void run() throws InterruptedException{
         final EventLoopGroup bossGroup = new NioEventLoopGroup();
-        final EventLoopGroup workerGroup = new NioEventLoopGroup(cpuNumber);
+        final EventLoopGroup workerGroup = new NioEventLoopGroup(threadsNumber);
         try{
             final ServerBootstrap server = new ServerBootstrap();
             server.group(bossGroup, workerGroup)

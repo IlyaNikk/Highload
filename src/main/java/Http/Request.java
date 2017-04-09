@@ -1,11 +1,12 @@
 package Http;
 
-
 public class Request {
 
     private Response response;
     private StringBuffer responseAnswer;
     private String serverDirectory ;
+    private String filePath;
+    private boolean picture;
 
     public Request(String msg, String directory) {
         serverDirectory = directory;
@@ -16,21 +17,21 @@ public class Request {
         switch (separateWords[0]) {
             case "GET":
                 response.methodGet();
-                try {
-                    response.setContentLenght();
-                    response.setContentType();
-                    response.setData();
-                } catch (Exception e) {
-                    System.out.println(e);
+                if(response.checkStatus() <= 300) {
+                    try {
+                        response.setContentLenght();
+                        response.setContentType();
+                        response.setData();
+                    } catch (Exception e) {}
                 }
                 break;
             case "HEAD":
                 response.methodHead();
-                try{
-                    response.setContentLenght();
-                    response.setContentType();
-                } catch (Exception e){
-                    System.out.println(e);
+                if(response.checkStatus() <= 300) {
+                    try {
+                        response.setContentLenght();
+                        response.setContentType();
+                    } catch (Exception e) {}
                 }
                 break;
             default:
@@ -38,10 +39,19 @@ public class Request {
                 break;
         }
         responseAnswer = response.getResponse();
+        picture = response.checkPicture();
+        filePath = response.getPath();
     }
 
     public String getResponse() {
         return responseAnswer.toString();
     }
 
+    public boolean checkPicture(){
+        return picture;
+    }
+
+    public String getPath(){
+        return filePath;
+    }
 }

@@ -1,6 +1,7 @@
 package Http;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,11 +23,10 @@ public class Response {
     private String directory;
     private String serverDirectory;
     private final String server = "Server: Highload/1.0.0 (UNIX)\r\n";
-    private Path index;
+    private Path index = null;
     private boolean fileExist = false;
     private boolean fileAbsent = false;
     private boolean text = true;
-    private String fileType;
     private int status;
 
     public Response(String serverDirectory) {
@@ -103,8 +103,7 @@ public class Response {
     public void setContentType() {
         final String[] parse = directory.split("\\.");
         responseAnswer.append("Content-Type: ");
-        fileType = parse[parse.length - 1];
-        switch (fileType) {
+        switch (parse[parse.length - 1]) {
             case "txt":
                 responseAnswer.append("text/plain \r\n\r\n");
                 break;
@@ -196,8 +195,13 @@ public class Response {
         return text;
     }
 
+    @Nullable
     public String getPath(){
-        return index.toString();
+        try{
+            return index.toString();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     public int checkStatus(){

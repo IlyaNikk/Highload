@@ -16,11 +16,12 @@ public class ServerChannel extends ChannelInboundHandlerAdapter {
     public ServerChannel(String dir) {
         serverDirectory = dir;
     }
+    private Request request;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        final Request request = new Request((String) msg, serverDirectory);
         try {
+            request = new Request((String) msg, serverDirectory);
         } finally {
             ReferenceCountUtil.release(msg);
         }

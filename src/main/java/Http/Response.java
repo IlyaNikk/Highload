@@ -1,21 +1,11 @@
 package Http;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.URLDecoder;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static Http.Status.getStatus;
 
 public class Response {
 
@@ -174,28 +164,10 @@ public class Response {
         }
     }
 
-    @NotNull
-    private String getStatus(int status) {
-        switch (status) {
-            case 403:
-                this.status = 403;
-                return "403 Forbidden\r\n";
-            case 404:
-                this.status = 404;
-                return "404 Not Found\r\n";
-            case 405:
-                this.status = 405;
-                return "405 Method Not Allowed\r\n";
-        }
-        this.status = 200;
-        return "200 OK\r\n";
-    }
-
     public boolean checkPicture(){
         return text;
     }
 
-    @Nullable
     public String getPath(){
         try{
             return index.toString();
